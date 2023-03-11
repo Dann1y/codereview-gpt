@@ -21,7 +21,7 @@ jobs:
       - name: Push Docker image to registry
         run: |
           echo ${{ secrets.REGISTRY_PASSWORD }} | docker login -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
-          docker push dann1y/raspberrypi-danny:myapp
+          docker push dann1y/raspberrypi-danny/myapp:latest
 
       - name: Deploy Docker image to Raspberry Pi
         uses: appleboy/ssh-action@master
