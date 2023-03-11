@@ -20,8 +20,8 @@ jobs:
 
       - name: Push Docker image to registry
         run: |
-          echo ${{ secrets.REGISTRY_PASSWORD }} | docker login -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin ${{ secrets.RASPBERRY_PI_IP }}:${{ secrets.RASPBERRY_PI_PORT }}
-          docker push ${{ secrets.RASPBERRY_PI_IP }}:${{ secrets.RASPBERRY_PI_PORT }}/myapp:latest
+          echo ${{ secrets.REGISTRY_PASSWORD }} | docker login -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+          docker push dann1y/raspberrypi-danny:tagname
 
       - name: Deploy Docker image to Raspberry Pi
         uses: appleboy/ssh-action@master
@@ -31,7 +31,7 @@ jobs:
           key: ${{ secrets.RASPBERRY_PI_PRIVATE_KEY }}
           port: ${{ secrets.RASPBERRY_PI_PORT }}
           script: |
-            docker pull ${{ secrets.RASPBERRY_PI_IP }}:${{ secrets.RASPBERRY_PI_PORT }}/myapp:latest
+            docker pull dann1y/raspberrypi-danny
             docker stop myapp || true
             docker rm myapp || true
             docker run -d --name myapp -p 9000:3000 ${{ secrets.RASPBERRY_PI_IP }}:${{ secrets.RASPBERRY_PI_PORT }}/myapp:latest
