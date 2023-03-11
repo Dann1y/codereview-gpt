@@ -16,7 +16,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t myapp:latest --file ./docker/Dockerfile .
-          docker tag myapp:latest dann1y/raspberrypi-danny/myapp:latest
+          docker tag dann1y/raspberrypi-danny/myapp:latest
 
       - name: Push Docker image to registry
         run: |
