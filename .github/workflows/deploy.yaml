@@ -15,7 +15,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t myapp:latest --file Dockerfile .
+          docker build -t myapp:latest --file ./docker/Dockerfile .
           docker tag myapp:latest ${{ secrets.RASPBERRY_PI_IP }}:${{ secrets.RASPBERRY_PI_PORT }}/myapp:latest
 
       - name: Push Docker image to registry
