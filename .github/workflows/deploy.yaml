@@ -16,12 +16,12 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t myapp:latest .
-          docker tag myapp:latest {{ secrets.RASPBERRY_PI_IP }}:${{ secrets.RASPBERRY_PI_PORT }}/myapp:latest
+          docker tag myapp:latest ${{ secrets.RASPBERRY_PI_IP }}:${{ secrets.RASPBERRY_PI_PORT }}/myapp:latest
 
       - name: Push Docker image to registry
         run: |
-          docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} {{ secrets.RASPBERRY_PI_IP }}:${{ secrets.RASPBERRY_PI_PORT }}
-          docker push {{ secrets.RASPBERRY_PI_IP }}:${{ secrets.RASPBERRY_PI_PORT }}/myapp:latest
+          docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} ${{ secrets.RASPBERRY_PI_IP }}:${{ secrets.RASPBERRY_PI_PORT }}
+          docker push ${{ secrets.RASPBERRY_PI_IP }}:${{ secrets.RASPBERRY_PI_PORT }}/myapp:latest
 
       - name: Deploy Docker image to Raspberry Pi
         uses: appleboy/ssh-action@master
@@ -31,7 +31,7 @@ jobs:
           key: ${{ secrets.RASPBERRY_PI_PRIVATE_KEY }}
           port: ${{ secrets.RASPBERRY_PI_PORT }}
           script: |
-            docker pull {{ secrets.RASPBERRY_PI_IP }}:${{ secrets.RASPBERRY_PI_PORT }}/myapp:latest
+            docker pull ${{ secrets.RASPBERRY_PI_IP }}:${{ secrets.RASPBERRY_PI_PORT }}/myapp:latest
             docker stop myapp || true
             docker rm myapp || true
-            docker run -d --name myapp -p 9000:3000 {{ secrets.RASPBERRY_PI_IP }}:${{ secrets.RASPBERRY_PI_PORT }}/myapp:latest
+            docker run -d --name myapp -p 9000:3000 ${{ secrets.RASPBERRY_PI_IP }}:${{ secrets.RASPBERRY_PI_PORT }}/myapp:latest
