@@ -1,16 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import OpenAI from 'openai-api';
+import { Configuration, OpenAIApi } from 'openai';
 import { Octokit } from '@octokit/rest';
 import { PullRequestEvent } from '@octokit/webhooks-definitions/schema';
 
 @Injectable()
 export class AppService {
-  private openai: OpenAI;
+  private openai: OpenAIApi;
   private octokit: Octokit;
 
   constructor() {
-    // GPT-3 API 인증 정보
-    this.openai = new OpenAI(process.env.OPENAI_API_KEY);
+    // OpenAI API 인증 정보
+    const configuration = new Configuration({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+    this.openai = new OpenAIApi(configuration);
 
     // GitHub API 인증 정보
     this.octokit = new Octokit({
@@ -37,16 +40,17 @@ export class AppService {
     });
 
     // diff를 GPT-3 API에 전송하여 리뷰 작성
-    const response = await this.openai.complete({
-      engine: 'davinci-codex',
-      prompt: `
-        Review the following code changes:
+    const prompt = `
+      Review the following code changes:
 
-        ${diff}
-        
-        Suggested review comments:
-      `,
-      maxTokens: 1024,
+      ${diff}
+      
+      Suggested review comments:
+    `;
+    const response = await this.openai.createCompletion({
+      model: 'text-davinci-003',
+      prompt,
+      max_tokens: 1024,
       n: 1,
       stop: ['Suggested review comments:'],
     });
