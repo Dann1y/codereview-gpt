@@ -9,6 +9,7 @@ export class AppService {
   private octokit: Octokit;
 
   //PR TEST
+  //branch
 
   constructor() {
     // OpenAI API 인증 정보
