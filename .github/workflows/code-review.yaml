@@ -1,0 +1,15 @@
+name: Code review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Code review
+        uses: danny-choi/code-review-action@v1.0.0
+        with:
+          token: ${{ secrets.CODE_REVIEW_BOT_TOKEN }}
