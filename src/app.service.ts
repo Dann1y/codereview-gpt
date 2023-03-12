@@ -8,6 +8,8 @@ export class AppService {
   private openai: OpenAIApi;
   private octokit: Octokit;
 
+  //PR TEST
+
   constructor() {
     // OpenAI API 인증 정보
     const configuration = new Configuration({
